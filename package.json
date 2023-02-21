@@ -12,7 +12,8 @@
   "author": "<contact@joey.dev>",
   "license": "MIT",
   "dependencies": {
-    "discord.js": "^14.7.1"
+    "discord.js": "^14.7.1",
+    "node-fetch": "^2.6.0"
   },
   "devDependencies": {
     "@types/node": "^18.13.0",

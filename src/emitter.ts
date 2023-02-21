@@ -30,4 +30,18 @@ export type EventType =
 
 export async function emit(event: EventType) {
   logger.debug(JSON.stringify(event, null, 2));
+  if (!process.env.INGESTION_URL) {
+    logger.error('No ingestion URL configured');
+    return;
+  }
+
+  await fetch(process.env.INGESTION_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(event),
+  }).catch((err) => {
+    logger.error('Failed to emit event', err);
+  });
 }

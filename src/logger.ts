@@ -1,14 +1,14 @@
 const logger = {
-  log: (...args: any[]) => {
+  log: (...args: unknown[]) => {
     console.log(...args);
   },
-  info: (...args: any[]) => {
+  info: (...args: unknown[]) => {
     console.info(...args);
   },
-  error: (...args: any[]) => {
+  error: (...args: unknown[]) => {
     console.error(...args);
   },
-  debug: (...args: any[]) => {
+  debug: (...args: unknown[]) => {
     if (process.env.DEBUG) {
       console.debug(...args);
     }
