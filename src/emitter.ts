@@ -1,4 +1,21 @@
-import logger from './logger';
+import logger from "./logger";
+
+export enum ParseTokenType {
+  Mention = "mention",
+  Newline = "newline",
+  Italics = "italics",
+  Bold = "bold",
+  Strikethrough = "strikethrough",
+  Code = "code",
+  CodeBlock = "code_block",
+  Quote = "quote",
+  QuoteBlock = "quote_block",
+  Link = "link",
+  Image = "image",
+  Spoiler = "spoiler",
+}
+
+export type ParseToken = string | { type: ParseTokenType; value: string };
 
 export type ThreadCreatePayload = {
   forumCategory: string;
@@ -6,7 +23,7 @@ export type ThreadCreatePayload = {
   timestamp: Date;
   threadId: string;
   messageId: string;
-  messageContent: string;
+  messageContent: Array<ParseToken>;
   authorId: string;
 };
 
@@ -15,16 +32,16 @@ type ThreadReplyPayload = {
   timestamp: Date;
   authorId: string;
   messageId: string;
-  messageContent: string;
+  messageContent: Array<ParseToken>;
 };
 
 export type EventType =
   | {
-      type: 'thread_create';
+      type: "thread_create";
       payload: ThreadCreatePayload;
     }
   | {
-      type: 'thread_reply';
+      type: "thread_reply";
       payload: ThreadReplyPayload;
     };
 

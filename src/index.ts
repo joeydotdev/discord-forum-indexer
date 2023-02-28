@@ -1,11 +1,12 @@
-import { Client, Events, GatewayIntentBits } from 'discord.js';
-import { exit } from 'process';
-import { emit, EventType } from './emitter';
-import logger from './logger';
+import { Client, Events, GatewayIntentBits } from "discord.js";
+import { exit } from "process";
+import { emit, EventType } from "./emitter";
+import logger from "./logger";
+import parse from "./parse";
 
 const token = process.env.DISCORD_TOKEN;
 if (!token) {
-  logger.error('DISCORD_TOKEN is not defined.');
+  logger.error("DISCORD_TOKEN is not defined.");
   exit(1);
 }
 
@@ -18,11 +19,11 @@ const client = new Client({
 });
 
 client.once(Events.ClientReady, () => {
-  logger.info('ready');
+  logger.info("ready");
 });
 
 client.on(Events.MessageCreate, async (message) => {
-  logger.debug('Message received');
+  logger.debug("Message received");
   if (!message.content) {
     return;
   }
@@ -42,25 +43,25 @@ client.on(Events.MessageCreate, async (message) => {
   const isThreadCreationMessage = incomingMessageId === opMessageId;
   const event: EventType = isThreadCreationMessage
     ? {
-        type: 'thread_create',
+        type: "thread_create",
         payload: {
-          forumCategory: '',
-          title: message.thread?.name || '',
+          forumCategory: "",
+          title: message.thread?.name || "",
           timestamp: op.createdAt,
           threadId: op.id,
           messageId: op.id,
-          messageContent: op.content,
+          messageContent: parse(op.content),
           authorId: op.author.id,
         },
       }
     : {
-        type: 'thread_reply',
+        type: "thread_reply",
         payload: {
           threadId: message.channel.id,
           timestamp: message.createdAt,
           authorId: message.author.id,
           messageId: message.id,
-          messageContent: message.content,
+          messageContent: parse(message.content),
         },
       };
 
